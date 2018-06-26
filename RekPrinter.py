@@ -6,22 +6,29 @@ from openpyxl.styles import PatternFill, Border, Side, Alignment, Protection, Fo
 from tkinter import *
 from tkinter import filedialog
 
+
 def getPath():
     root.filename = filedialog.askopenfilename(title = 'Select file', filetypes = (('Excel files','*.xlsx'),('All files','*.*')))
     return root.filename
 
 
 def setPath(path):
+    path = path.split('/')
+    output = ''
+    for i in range(len(path) - 1):
+        output += path[i] + '/'
+    output += 'GLT Kvällsbeställningar.xlsx'
+
     i = 0
-    while os.path.isfile(path):
+    while os.path.isfile(output):
         if i == 0:
-            path = path[:-5] + ' (1).xlsx'
+            output = output[:-5] + ' (1).xlsx'
         else:
-            parenthesis = path.find('(')
-            path = path[:parenthesis+1] + str(i) + ').xlsx'
+            parenthesis = output.find('(')
+            output = output[:parenthesis+1] + str(i) + ').xlsx'
         i += 1
 
-    return path
+    return output
 
 
 def copyRow(row, startCol, endCol, sheet):
