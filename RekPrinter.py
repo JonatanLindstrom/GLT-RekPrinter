@@ -86,8 +86,7 @@ def formatFile(path):
 
 
 def main():
-    path = '/Users/jonatanlindstrom/Downloads/Bok2.xlsx' 
-    #path = getPath()
+    path = getPath()
     formatFile(path)
 
 
