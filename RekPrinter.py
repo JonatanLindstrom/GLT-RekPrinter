@@ -15,11 +15,11 @@ def getPath():
 
 
 def setPath(path):
+    now = datetime.datetime.fromtimestamp(os.path.getctime(path)).strftime('%Y%m%d')
     path = path.split('/')
     output = ''
     for i in range(len(path) - 1):
         output += path[i] + '/'
-    now = datetime.datetime.today().strftime('%Y%m%d')
     output += ('Kvällsbeställningar ' + now[2:] + '.xlsx')
 
     i = 0
@@ -30,7 +30,7 @@ def setPath(path):
             parenthesis = output.find('(')
             output = output[:parenthesis+1] + str(i) + ').xlsx'
         i += 1
-        
+
     return output
 
 
