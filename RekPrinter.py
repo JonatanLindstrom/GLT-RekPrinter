@@ -1,4 +1,5 @@
 import os
+import re
 # Import Workbook
 from openpyxl import *
 from openpyxl.styles import PatternFill, Border, Side, Alignment, Protection, Font
@@ -17,7 +18,7 @@ def setPath(path):
     output = ''
     for i in range(len(path) - 1):
         output += path[i] + '/'
-    output += 'GLT Kvällsbeställningar.xlsx'
+    output += 'Kvällsbeställningar.xlsx'
 
     i = 0
     while os.path.isfile(output):
@@ -58,6 +59,66 @@ def pasteRow(row, startCol, endCol, sheetReceiving, copiedData):
     sheetReceiving.column_dimensions['F'].width = 6
 
 
+def checkReq(wb):
+    placedict = {'551': 'Slushbaren',
+                 '552': 'Ben & Jerry\'s',
+                 '553': 'Pop 3an',
+                 '554': 'Pop 2an',
+                 '555': 'Boardwalk Café',
+                 '556': 'Glasskammaren',
+                 '557': 'Coffee and Donuts',
+                 '558': 'Langos',
+                 '559': 'Fish & Chips',
+                 '560': 'Godisfabriken',
+                 '561': 'Coffeebar',
+                 '562': 'Mexican Corner',
+                 '563': 'Matvraket',
+                 '564': 'Ham 1an',
+                 '565': 'Korv 2an',
+                 '566': 'Hamburger 3an',
+                 '567': 'Glass & Pop 1an',
+                 '568': 'Glass 2an',
+                 '569': 'Gyros',
+                 '570': 'Grädderiet',
+                 '571': 'Honeycomb',
+                 '572': 'Pizzan',
+                 '573': 'Poké Bowl',
+                 '574': 'Tivolisnacks',
+                 '575': 'Remvagn 1',
+                 '576': 'Kebaben',
+                 '577': 'Kvastenkiosken',
+                 '578': 'Remvagn 2',
+                 '579': 'Remvagn 3',
+                 '580': 'Popcorn & Cotton Candy',
+                 '581': 'Korvvagn 1',
+                 '582': 'Milkshakebaren',
+                 '583': 'Korvvagn 3',
+                 '584': 'Coca cola store',
+                 '612': '1883-butiken',
+                 '613': 'Tivolibutiken',
+                 '623': 'Fotobutik Lustiga huset',
+                 '626': 'Fotobutik Twister',
+                 '700': 'Testlocation'}
+
+    reqs = wb.sheetnames
+    missing = list()
+    for cc, place in placedict.items():
+        if place not in reqs:
+            if re.match('.* [0-9]an', place):
+                missing.append([cc, place[:-2] + ':' + place[-2:]])
+            else:
+                missing.append([cc, place])
+    
+    wb.create_sheet('Saknade rekar')
+    activeWS = wb['Saknade rekar']
+    pasteRow(1, 4, 4, activeWS, ['Saknade rekar'])
+    pasteRow(3, 3, 5, activeWS, ['Kostnadsställe', 'Enhet', 'Telefon'])
+    i = 4
+    for row in missing:
+        pasteRow(i, 3, 4, activeWS, row)
+        i += 1
+
+
 def formatFile(path):
     wb = load_workbook(filename=path)
 
@@ -89,7 +150,12 @@ def formatFile(path):
         previousRow = rowlist
     
     wb.remove(orgWS)
-    wb.save(setPath(path))
+    
+    checkReq(wb)
+
+    output = setPath(path)
+    wb.save(output)
+    os.startfile(output)
 
 
 def main():
