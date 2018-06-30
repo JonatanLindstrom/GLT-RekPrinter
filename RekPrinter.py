@@ -109,11 +109,11 @@ def checkReq(wb):
             else:
                 missing.append([cc, place])
     
-    wb.create_sheet('Saknade rekar')
+    wb.create_sheet('Saknade rekar', 0)
     activeWS = wb['Saknade rekar']
     pasteRow(1, 4, 4, activeWS, ['Saknade rekar'])
     pasteRow(3, 3, 5, activeWS, ['Kostnadsställe', 'Enhet', 'Telefon'])
-    i = 4
+    i = 5
     for row in missing:
         pasteRow(i, 3, 4, activeWS, row)
         i += 1
