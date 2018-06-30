@@ -1,5 +1,6 @@
 import os
 import re
+import datetime
 # Import Workbook
 from openpyxl import *
 from openpyxl.styles import PatternFill, Border, Side, Alignment, Protection, Font
@@ -18,7 +19,8 @@ def setPath(path):
     output = ''
     for i in range(len(path) - 1):
         output += path[i] + '/'
-    output += 'Kvällsbeställningar.xlsx'
+    now = datetime.datetime.today().strftime('%Y%m%d')
+    output += ('Kvällsbeställningar ' + now[2:] + '.xlsx')
 
     i = 0
     while os.path.isfile(output):
@@ -28,7 +30,7 @@ def setPath(path):
             parenthesis = output.find('(')
             output = output[:parenthesis+1] + str(i) + ').xlsx'
         i += 1
-
+        
     return output
 
 
@@ -36,7 +38,7 @@ def copyRow(row, startCol, endCol, sheet):
     rowSelected = []
     for j in range(startCol,endCol+1):
         rowSelected.append(sheet.cell(row = row, column = j).value)
- 
+
     return rowSelected
 
 
