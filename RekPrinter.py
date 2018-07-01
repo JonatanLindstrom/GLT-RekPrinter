@@ -62,62 +62,67 @@ def pasteRow(row, startCol, endCol, sheetReceiving, copiedData):
 
 
 def checkReq(wb):
-    placedict = {'551': 'Slushbaren',
-                 '552': 'Ben & Jerry\'s',
-                 '553': 'Pop 3an',
-                 '554': 'Pop 2an',
-                 '555': 'Boardwalk Café',
-                 '556': 'Glasskammaren',
-                 '557': 'Coffee and Donuts',
-                 '558': 'Langos',
-                 '559': 'Fish & Chips',
-                 '560': 'Godisfabriken',
-                 '561': 'Coffeebar',
-                 '562': 'Mexican Corner',
-                 '563': 'Matvraket',
-                 '564': 'Ham 1an',
-                 '565': 'Korv 2an',
-                 '566': 'Hamburger 3an',
-                 '567': 'Glass & Pop 1an',
-                 '568': 'Glass 2an',
-                 '569': 'Gyros',
-                 '570': 'Grädderiet',
-                 '571': 'Honeycomb',
-                 '572': 'Pizzan',
-                 '573': 'Poké Bowl',
-                 '574': 'Tivolisnacks',
-                 '575': 'Remvagn 1',
-                 '576': 'Kebaben',
-                 '577': 'Kvastenkiosken',
-                 '578': 'Remvagn 2',
-                 '579': 'Remvagn 3',
-                 '580': 'Popcorn & Cotton Candy',
-                 '581': 'Korvvagn 1',
-                 '582': 'Milkshakebaren',
-                 '583': 'Korvvagn 3',
-                 '584': 'Coca cola store',
-                 '612': '1883-butiken',
-                 '613': 'Tivolibutiken',
-                 '623': 'Fotobutik Lustiga huset',
-                 '626': 'Fotobutik Twister',
-                 '700': 'Testlocation'}
+    placeMap = [['551', 'Slushbaren', 9505],
+                ['552', 'Ben & Jerry\'s', 9506],
+                ['553', 'Pop 3an', 9507],
+                ['554', 'Pop 2an', 9508],
+                ['555', 'Boardwalk Café', 9509],
+                ['556', 'Glasskammaren', 9510],
+                ['557', 'Coffee and Donuts', 9511],
+                ['558', 'Langos', 9512],
+                ['559', 'Fish & Chips', 9513],
+                ['560', 'Godisfabriken', 9514],
+                ['561', 'Coffeebar', 9515],
+                ['562', 'Mexican Corner', 9516],
+                ['563', 'Matvraket', 9517],
+                ['564', 'Ham 1an', 9518],
+                ['565', 'Korv 2an', 9519],
+                ['566', 'Hamburger 3an', 9520],
+                ['567', 'Glass & Pop 1an', 9521],
+                ['568', 'Glass 2an', 9522],
+                ['569', 'Gyros', 9523],
+                ['570', 'Grädderiet', 9524],
+                ['571', 'Honeycomb', 9525],
+                ['572', 'Pizzan', 9526],
+                ['573', 'Poké Bowl', 9557],
+                ['574', 'Tivolisnacks', 9557],
+                ['575', 'Remvagn 1', 9557],
+                ['576', 'Kebaben', 9557],
+                ['577', 'Kvastenkiosken', 9557],
+                ['578', 'Remvagn 2', 9557],
+                ['579', 'Remvagn 3', 9557],
+                ['580', 'Popcorn & Cotton Candy', 9557],
+                ['581', 'Korvvagn 1', 9557],
+                ['582', 'Milkshakebaren', 9557],
+                ['583', 'Korvvagn 3', 9557],
+                ['584', 'Coca cola store', 9557],
+                ['612', '1883-butiken', 9557],
+                ['613', 'Tivolibutiken', 9557],
+                ['623', 'Fotobutik Lustiga huset', 9557],
+                ['626', 'Fotobutik Twister', 9557],
+                ['700', 'Testlocation', 9557]]
 
     reqs = wb.sheetnames
     missing = list()
-    for cc, place in placedict.items():
+    for row in placeMap:
+        place = row[1]
         if place not in reqs:
             if re.match('.* [0-9]an', place):
-                missing.append([cc, place[:-2] + ':' + place[-2:]])
+                row[1] = place[:-2] + ':' + place[-2:]
+                missing.append(row)
             else:
-                missing.append([cc, place])
+                missing.append(row)
     
     wb.create_sheet('Saknade rekar', 0)
     activeWS = wb['Saknade rekar']
-    pasteRow(1, 4, 4, activeWS, ['Saknade rekar'])
+    activeWS['C1'] = 'Saknade rekar'
+    activeWS['C1'].alignment = Alignment(horizontal='center')
+    activeWS.merge_cells('C1:E1')
+
     pasteRow(3, 3, 5, activeWS, ['Kostnadsställe', 'Enhet', 'Telefon'])
     i = 5
     for row in missing:
-        pasteRow(i, 3, 4, activeWS, row)
+        pasteRow(i, 3, 5, activeWS, row)
         i += 1
 
 
