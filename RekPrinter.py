@@ -67,26 +67,29 @@ def splitReq(wb):
     orgWS.delete_cols(2)
 
     for placeRow in placeMap:
-        place = placeRow[1]
-        if re.match('.* [0-9]an', place):
-            place = place[:-2] + ':' + place[-2:]
+        wb.create_sheet(placeRow[1])
 
-        activeWS = wb.create_sheet(place.replace(':', ''))
-        newWSi = 0
-        orgWSi = 0
+    newWSi = 0
+    orgWSi = 0
+    previousRow = ['Radnr', 'Företagskod', 'Företag', 'Benämning', 'Återstår antal', 'Enhet']
+    for row in orgWS.rows:
+        rowlist = list()
+        for cell in row:
+            rowlist.append(str(cell.value))
+        
+        orgWSi += 1
+        if rowlist[2] != previousRow[2]:
+            newWSi = 1
+        else:
+            newWSi += 1    
 
-        for row in orgWS.rows:
-            rowlist = list()
-            for cell in row:
-                rowlist.append(str(cell.value))
-            
-            orgWSi += 1
-            if place == rowlist[2]:
-                newWSi += 1
+        if rowlist[2] != 'Företag':
+            activeWS = wb[rowlist[2].replace(':', '')]
+            activeRow = copyRow(orgWSi, 1, len(rowlist), orgWS)
+            pasteRow(newWSi, 1, len(activeRow), activeWS, activeRow)
 
-                activeRow = copyRow(orgWSi, 1, len(rowlist), orgWS)
-                pasteRow(newWSi, 1, len(activeRow), activeWS, activeRow)
-
+        previousRow = rowlist
+    
     wb.remove(orgWS)
 
 
