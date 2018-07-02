@@ -61,46 +61,43 @@ def pasteRow(row, startCol, endCol, sheetReceiving, copiedData):
     sheetReceiving.column_dimensions['F'].width = 6
 
 
+def splitReq(wb):
+    orgWS = wb.active
+    orgWS.delete_cols(5)
+    orgWS.delete_cols(2)
+
+    for placeRow in placeMap:
+        place = placeRow[1]
+        if re.match('.* [0-9]an', place):
+            place = place[:-2] + ':' + place[-2:]
+
+        activeWS = wb.create_sheet(place.replace(':', ''))
+        newWSi = 0
+        orgWSi = 0
+
+        for row in orgWS.rows:
+            rowlist = list()
+            for cell in row:
+                rowlist.append(str(cell.value))
+            
+            orgWSi += 1
+            if place == rowlist[2]:
+                newWSi += 1
+
+                activeRow = copyRow(orgWSi, 1, len(rowlist), orgWS)
+                pasteRow(newWSi, 1, len(activeRow), activeWS, activeRow)
+
+
+    wb.remove(orgWS)
+
+
 def checkReq(wb):
-    placeMap = [['551', 'Slushbaren', 9505],
-                ['552', 'Ben & Jerry\'s', 9506],
-                ['553', 'Pop 3an', 9507],
-                ['554', 'Pop 2an', 9508],
-                ['555', 'Boardwalk Café', 9509],
-                ['556', 'Glasskammaren', 9510],
-                ['557', 'Coffee and Donuts', 9511],
-                ['558', 'Langos', 9512],
-                ['559', 'Fish & Chips', 9513],
-                ['560', 'Godisfabriken', 9514],
-                ['561', 'Coffeebar', 9515],
-                ['562', 'Mexican Corner', 9516],
-                ['563', 'Matvraket', 9517],
-                ['564', 'Ham 1an', 9518],
-                ['565', 'Korv 2an', 9519],
-                ['566', 'Hamburger 3an', 9520],
-                ['567', 'Glass & Pop 1an', 9521],
-                ['568', 'Glass 2an', 9522],
-                ['569', 'Gyros', 9523],
-                ['570', 'Grädderiet', 9524],
-                ['571', 'Honeycomb', 9525],
-                ['572', 'Pizzan', 9526],
-                ['573', 'Poké Bowl', 9557],
-                ['574', 'Tivolisnacks', 9557],
-                ['575', 'Remvagn 1', 9557],
-                ['576', 'Kebaben', 9557],
-                ['577', 'Kvastenkiosken', 9557],
-                ['578', 'Remvagn 2', 9557],
-                ['579', 'Remvagn 3', 9557],
-                ['580', 'Popcorn & Cotton Candy', 9557],
-                ['581', 'Korvvagn 1', 9557],
-                ['582', 'Milkshakebaren', 9557],
-                ['583', 'Korvvagn 3', 9557],
-                ['584', 'Coca cola store', 9557],
-                ['612', '1883-butiken', 9557],
-                ['613', 'Tivolibutiken', 9557],
-                ['623', 'Fotobutik Lustiga huset', 9557],
-                ['626', 'Fotobutik Twister', 9557],
-                ['700', 'Testlocation', 9557]]
+    for sheetName in wb.sheetnames:
+        if sheetName == 'Saknade rekar':
+            continue
+        sheet = wb[sheetName]
+        if sheet['A1'].value == None:
+            wb.remove(sheet)
 
     reqs = wb.sheetnames
     missing = list()
@@ -129,34 +126,7 @@ def checkReq(wb):
 def formatFile(path):
     wb = load_workbook(filename=path)
 
-    orgWS = wb['Blad1']
-    orgWS.delete_cols(5)
-    orgWS.delete_cols(2)
-
-    previousRow = ['Radnr', 'Företagskod', 'Företag', 'Benämning', 'Återstår antal', 'Enhet']
-    i = 1
-    j = 0
-    for row in orgWS.rows:
-        rowlist = list()
-        for cell in row:
-            rowlist.append(str(cell.value))
-        
-        if rowlist[2] != previousRow[2]:
-            wb.create_sheet(rowlist[2].replace(':', ''))
-            i = 1
-        else:
-            i += 1
-        j += 1
-        
-        if rowlist[2] != 'Företag':
-            activeWS = wb[rowlist[2].replace(':', '')]
-
-            activeRow = copyRow(j, 1, len(rowlist), orgWS)
-            pasteRow(i, 1, len(activeRow), activeWS, activeRow)
-
-        previousRow = rowlist
-    
-    wb.remove(orgWS)
+    splitReq(wb)
     
     checkReq(wb)
 
@@ -172,6 +142,47 @@ def main():
 
 root = Tk()
 root.withdraw()
+
+placeMap = [['564', 'Ham 1an', 9518],
+            ['567', 'Glass & Pop 1an', 9521],
+            ['581', 'Korvvagn 1', 9557],
+            ['575', 'Remvagn 1', 9557],
+            ['551', 'Slushbaren', 9505],
+            ['552', 'Ben & Jerry\'s', 9506],
+            ['554', 'Pop 2an', 9508],
+            ['555', 'Boardwalk Café', 9509],
+            ['556', 'Glasskammaren', 9510],
+            ['557', 'Coffee and Donuts', 9511],
+            ['559', 'Fish & Chips', 9513],
+            ['558', 'Langos', 9512],
+            ['560', 'Godisfabriken', 9514],
+            ['561', 'Coffeebar', 9515],
+            ['562', 'Mexican Corner', 9516],
+            ['563', 'Matvraket', 9517],
+            ['565', 'Korv 2an', 9519],
+            ['568', 'Glass 2an', 9522],
+            ['578', 'Remvagn 2', 9557],
+            ['569', 'Gyros', 9523],
+            ['570', 'Grädderiet', 9524],
+            ['571', 'Honeycomb', 9525],
+            ['572', 'Pizzan', 9526],
+            ['573', 'Poké Bowl', 9557],
+            ['574', 'Tivolisnacks', 9557],
+            ['576', 'Kebaben', 9557],
+            ['577', 'Kvastenkiosken', 9557],
+            ['583', 'Korvvagn 3', 9557],
+            ['566', 'Hamburger 3an', 9520],
+            ['553', 'Pop 3an', 9507],
+            ['579', 'Remvagn 3', 9557],
+            ['580', 'Popcorn & Cotton Candy', 9557],
+            ['582', 'Milkshakebaren', 9557],
+            ['584', 'Coca cola store', 9557],
+            ['612', '1883-butiken', 9557],
+            ['613', 'Tivolibutiken', 9557],
+            ['623', 'Fotobutik Lustiga huset', 9557],
+            ['626', 'Fotobutik Twister', 9557],
+            ['700', 'Testlocation', 9557]]
+
 
 if __name__ == '__main__':
     main()
