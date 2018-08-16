@@ -125,8 +125,26 @@ def checkReq(wb):
         i += 1
 
 
+def getPlacemap():
+    scriptPath = os.path.dirname(os.path.realpath(__file__))
+    placemapPath = scriptPath + ('\placeMap.txt')
+
+    if os.path.isfile(placemapPath):
+        places = open(placemapPath, 'r')
+        placeMap = []
+        for row in places:
+            row = row.replace(' ', '').replace('\n', '')
+            if row == '' or row.startswith('//'):
+                print('LOL' + row)
+            else:
+                placeMap.append(row.split(','))
+    print(placeMap)
+
+
 def formatFile(path):
     wb = load_workbook(filename=path)
+
+    #getPlacemap()
 
     splitReq(wb)
     
