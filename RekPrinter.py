@@ -63,8 +63,17 @@ def pasteRow(row, startCol, endCol, sheetReceiving, copiedData):
 
 def splitReq(wb):
     orgWS = wb.active
-    orgWS.delete_cols(5)
-    orgWS.delete_cols(2)
+
+    i = 1
+    cell = orgWS.cell(row=1, column=i)
+    while cell.value != '' and cell.value != None:
+        print(cell, cell.value)
+        if cell.value not in ['Radnr', 'Företagskod', 'Företag', 'Benämning', 'Återstår antal', 'Enhet']:
+            print('delete')
+            orgWS.delete_cols(i)
+        else:
+            i += 1
+        cell = orgWS.cell(row=1, column=i)
 
     for placeRow in placeMap:
         wb.create_sheet(placeRow[1])
@@ -75,7 +84,8 @@ def splitReq(wb):
     for row in orgWS.rows:
         rowlist = list()
         for cell in row:
-            rowlist.append(str(cell.value))
+            if cell.value != 'None':
+                rowlist.append(str(cell.value))
         
         orgWSi += 1
         if rowlist[2] != previousRow[2]:
@@ -85,7 +95,7 @@ def splitReq(wb):
 
         if rowlist[2] != 'Företag':
             activeWS = wb[rowlist[2].replace(':', '')]
-            activeRow = copyRow(orgWSi, 1, len(rowlist), orgWS)
+            activeRow = copyRow(orgWSi, 1, len(rowlist)-1, orgWS)
             pasteRow(newWSi, 1, len(activeRow), activeWS, activeRow)
 
         previousRow = rowlist
