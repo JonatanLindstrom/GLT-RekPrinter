@@ -3,4 +3,4 @@
 *.bat
 *.ico
 *.spec
-*.txt
+version.txt
