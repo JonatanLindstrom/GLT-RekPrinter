@@ -67,9 +67,7 @@ def splitReq(wb):
     i = 1
     cell = orgWS.cell(row=1, column=i)
     while cell.value != '' and cell.value != None:
-        print(cell, cell.value)
         if cell.value not in ['Radnr', 'Företagskod', 'Företag', 'Benämning', 'Återstår antal', 'Enhet']:
-            print('delete')
             orgWS.delete_cols(i)
         else:
             i += 1
