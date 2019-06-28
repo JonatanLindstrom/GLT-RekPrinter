@@ -74,6 +74,7 @@ def splitReq(wb):
         cell = orgWS.cell(row=1, column=i)
 
     for placeRow in placeMap:
+        #print(placeRow[1])
         wb.create_sheet(placeRow[1])
 
     newWSi = 0
@@ -178,7 +179,7 @@ placeMap = [['564', 'Ham 1an', 9703],
             ['571', 'Honeycomb', 0000],
             ['581', 'Korvvagn 1', 9707],
             ['575', 'Remvagn 1', 9706],
-            ['584', 'Coca cola store', 9807],
+            ['621', 'Coke store', 9807],
             ['563', 'Matvraket', 9718],
             ['576', 'Kebaben', 9714],
             ['562', 'Mexican Corner', 9711],
@@ -189,7 +190,7 @@ placeMap = [['564', 'Ham 1an', 9703],
             ['568', 'Glass 2an', 9713],
             ['570', 'Grädderiet', 9719],
             ['578', 'Remvagn 2', 9720],
-            ['560', 'Godisfabriken', 9717],
+            ['624', 'Godisfabriken', 9717],
             ['566', 'Hamburger 3an', 9737],
             ['569', 'Gyros', 9736],
             ['558', 'Langos', 9734],
