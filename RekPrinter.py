@@ -53,12 +53,12 @@ def pasteRow(row, startCol, endCol, sheetReceiving, copiedData):
                                                                     top=Side(border_style='thin', color='00000000'),
                                                                     bottom=Side(border_style='thin', color='00000000'))
 
-    sheetReceiving.column_dimensions['A'].width = 6
-    sheetReceiving.column_dimensions['B'].width = 6
-    sheetReceiving.column_dimensions['C'].width = 15
+    sheetReceiving.column_dimensions['A'].width = 5
+    sheetReceiving.column_dimensions['B'].width = 10
+    sheetReceiving.column_dimensions['C'].width = 17
     sheetReceiving.column_dimensions['D'].width = 39
-    sheetReceiving.column_dimensions['E'].width = 9
-    sheetReceiving.column_dimensions['F'].width = 6
+    sheetReceiving.column_dimensions['E'].width = 7
+    sheetReceiving.column_dimensions['F'].width = 5
 
 
 def splitReq(wb):
@@ -67,7 +67,7 @@ def splitReq(wb):
     i = 1
     cell = orgWS.cell(row=1, column=i)
     while cell.value != '' and cell.value != None:
-        if cell.value not in ['Radnr', 'Företagskod', 'Företag', 'Benämning', 'Återstår antal', 'Enhet']:
+        if cell.value not in ['Radnr', 'Ordernr', 'Företag', 'Benämning', 'Återstår antal', 'Enhet']:
             orgWS.delete_cols(i)
         else:
             i += 1
@@ -79,7 +79,7 @@ def splitReq(wb):
 
     newWSi = 0
     orgWSi = 0
-    previousRow = ['Radnr', 'Företagskod', 'Företag', 'Benämning', 'Återstår antal', 'Enhet']
+    previousRow = ['Radnr', 'Ordernr', 'Företag', 'Benämning', 'Återstår antal', 'Enhet']
     for row in orgWS.rows:
         rowlist = list()
         for cell in row:
