@@ -207,7 +207,6 @@ placeMap = [['564', 'Ham 1an', 9703],
             ['583', 'Korvvagn 3', 9740],
             ['552', 'Ben & Jerry\'s', 9738],
             ['612', '1883-butiken', 9801],
-            ['613', 'Tivolibutiken', 9803],
             ['623', 'Fotobutik Lustiga huset', 9808],
             ['626', 'Fotobutik Twister', 9809]]
 
