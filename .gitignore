@@ -3,5 +3,6 @@
 /dist
 *.bat
 *.ico
+*.exe
 *.spec
 version.txt
