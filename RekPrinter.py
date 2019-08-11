@@ -1,5 +1,6 @@
 import os
 import re
+import time
 import datetime
 # Import Workbook
 from openpyxl import *
@@ -11,6 +12,15 @@ from tkinter import filedialog
 
 def getPath():
     root.filename = filedialog.askopenfilename(title = 'Select file', filetypes = (('Excel files','*.xlsx'),('All files','*.*')))
+
+    fileCreation = os.path.getctime(root.filename)
+    now = time.time()
+    oneHourAgo = now - 60*60 #3600 seconds ago
+
+    if(fileCreation < oneHourAgo):
+        print('Filen är över en timme gammal, är du säker?')
+        input("Press Enter to continue...")
+
     return root.filename
 
 
